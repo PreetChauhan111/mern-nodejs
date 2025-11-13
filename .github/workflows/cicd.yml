@@ -34,4 +34,4 @@ jobs:
         run: docker pull preetchauhan/nodejs-mern:latest
 
       - name: Run Docker container
-        run: docker run -d -p 4000:4000 --name nodejs-mern-container --env MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} preetchauhan/nodejs-mern:latest
+        run: docker run -d -p 4000:4000 --name nodejs-mern-container --env MONGO_PASSWORD="${{ secrets.MONGO_PASSWORD }}" preetchauhan/nodejs-mern:latest
