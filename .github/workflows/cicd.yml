@@ -23,15 +23,15 @@ jobs:
       run: docker build -t preetchauhan/reactjs-mern:latest .
 
     - name: Push Docker image
-      run: docker push preetchauhan/reactjs-mern:latest
+      run: docker push preetchauhan/nodejs-mern:latest
 
   deploy:
     needs: build
-    runs-on: ["self-hosted", "linux", "x64", "aws-ec2"]
+    runs-on: ["self-hosted", "linux", "aws-ec2"]
 
     steps:
       - name: Pull Docker image
-        run: docker pull preetchauhan/reactjs-mern:latest
+        run: docker pull preetchauhan/nodejs-mern:latest
 
       - name: Run Docker container
-        run: docker run -d -p 4000:4000 --name nodejs-mern-container -e MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} preetchauhan/reactjs-mern:latest
+        run: docker run -d -p 4000:4000 --name nodejs-mern-container -e MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} preetchauhan/nodejs-mern:latest
