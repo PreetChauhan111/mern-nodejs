@@ -1,0 +1,37 @@
+name: Deploy Node.js App
+
+on:
+  push:
+    branches:
+      - deploy-node
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build Docker image
+      run: docker build -t preetchauhan/reactjs-mern:latest .
+
+    - name: Push Docker image
+      run: docker push preetchauhan/reactjs-mern:latest
+
+deploy:
+  needs: build
+  runs-on: ["self-hosted", "linux", "x64", "aws-ec2"]
+
+  steps:
+    - name: Pull Docker image
+      run: docker pull preetchauhan/reactjs-mern:latest
+
+    - name: Run Docker container
+      run: docker run -d -p 4000:4000 --name nodejs-mern-container -e MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} preetchauhan/reactjs-mern:latest
